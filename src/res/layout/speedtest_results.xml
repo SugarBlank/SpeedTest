@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:xmls="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="40dp"
+        android:paddingTop="40dp"
+        >
+        <TextView
+            android:id="@+id/InternetResults"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Speed Test Results:"
+            android:textSize="24dp"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+
+            />
+        <TextView
+            android:id="@+id/ipAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ipAddress"
+            android:textSize="16dp"
+            android:layout_below="@id/InternetResults"
+            android:layout_marginTop="15dp" />
+        <TextView
+            android:id="@+id/downloadSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/downloadSpeed"
+            android:layout_below="@id/ipAddress"
+            android:textSize="16dp"
+            android:layout_marginTop="15dp"
+            />
+        <TextView
+            android:id="@+id/uploadSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/uploadSpeed"
+            android:layout_below="@id/downloadSpeed"
+            android:textSize="16dp"
+            android:layout_marginTop="15dp"
+            />
+        <TextView
+            android:id="@+id/pingNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/numberPing"
+            android:textSize="16dp"
+            android:layout_below="@id/uploadSpeed"
+            android:layout_marginTop="15dp"
+            />
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

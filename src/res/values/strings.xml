@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Scouri\'s Speed Tester</string>
+    <string name="app_ui_name">SBSTA</string>
+    <string name="title_home">Server Selection</string>
+    <string name="title_dashboard">Speed Check</string>
+    <string name="serverSelection">Select a server:</string>
+    <string name="downloadSpeed">Download Speed:</string>
+    <string name="uploadSpeed">Upload Speed:</string>
+    <string name="Ping">Ping:</string>
+    <string name="gitterInfo">Jitter:</string>
+    <string name="ipAddressName">IP Address:</string>
+    <string name="numberPing">0</string>
+    <string name="ipAddress">192.168.1.1</string>
+</resources>
