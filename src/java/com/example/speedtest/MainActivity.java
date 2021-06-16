@@ -21,8 +21,14 @@ import com.example.speedtest.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
     private TextView ipAddress;
-
     private ActivityMainBinding binding;
+    HostServer HostServerHandler;
+    @Override
+    public void onResume() {
+        super.onResume();
+        HostServerHandler = new HostServer();
+        HostServerHandler.start();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
