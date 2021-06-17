@@ -19,6 +19,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:textColor="@color/Font"
+        android:minHeight="60sp"
         app:menu="@menu/bottom_nav_menu" />
 
     <RelativeLayout
@@ -44,6 +45,10 @@
             android:text="Start Speed Test"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:width="175sp"
+            android:height="175sp"
+            android:background="@drawable/circle"
+            android:textSize="23dp"
             />
     </RelativeLayout>
 
