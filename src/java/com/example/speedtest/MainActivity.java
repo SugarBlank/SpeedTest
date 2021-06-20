@@ -1,6 +1,8 @@
 package com.example.speedtest;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -16,13 +18,18 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.text.DecimalFormat;
+import java.util.HashSet;
 
 import com.example.speedtest.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
     private TextView ipAddress;
     private ActivityMainBinding binding;
+    final DecimalFormat Format = new DecimalFormat("#.##");
+    HashSet<String> BlackList;
     HostServer HostServerHandler;
+
     @Override
     public void onResume() {
         super.onResume();
@@ -32,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        BlackList = new HashSet<>();
 
         super.onCreate(savedInstanceState);
 
@@ -50,6 +59,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         ipAddress = (TextView) findViewById(R.id.ipAddress);
+        final Button SpeedTestButton = (Button) findViewById(R.id.startButton);
+        HostServerHandler = new HostServer();
+        HostServerHandler.start();
+
+        SpeedTestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SpeedTestButton.setEnabled(false);
+            }
+        });
 
     }
 
