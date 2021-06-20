@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Scouri\'s Speed Tester</string>
     <string name="app_ui_name">SBSTA</string>
-    <string name="title_home">Server Selection</string>
+    <string name="title_home">Speed Check</string>
     <string name="title_dashboard">Speed Check</string>
     <string name="serverSelection">Select a server:</string>
     <string name="downloadSpeed">Download Speed:</string>
