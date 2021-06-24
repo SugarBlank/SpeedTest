@@ -5,10 +5,14 @@
     <string name="title_dashboard">Speed Check</string>
     <string name="serverSelection">Select a server:</string>
     <string name="downloadSpeed">Download Speed:</string>
+    <string name="downloadValue">0 mbps</string>
     <string name="uploadSpeed">Upload Speed:</string>
-    <string name="Ping">Ping:</string>
+    <string name="uploadValue">0 mbps</string>
+    <string name="ipAddress">IP Address:</string>
+    <string name="pingName">Ping:</string>
     <string name="jitterInfo">Jitter:</string>
+    <string name="jitterValue">0 ms</string>
     <string name="ipAddressName">IP Address:</string>
-    <string name="numberPing">0 m.s</string>
-    <string name="ipAddress">192.168.1.1</string>
+    <string name="pingValue">0 ms</string>
+    <string name="ipAddressValue">192.168.1.1</string>
 </resources>
