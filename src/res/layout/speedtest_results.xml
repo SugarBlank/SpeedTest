@@ -15,10 +15,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Speed Test Results"
-            android:textSize="24dp"
+            android:textSize="30dp"
             android:layout_centerHorizontal="true"
             android:textStyle="bold"
-
+            />
+        <TextView
+            android:id="@+id/underline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="__________________"
+            android:textSize="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-20dp"
+            android:layout_below="@id/InternetResults"
             />
         <TextView
             android:id="@+id/ipAddress"
@@ -26,14 +35,24 @@
             android:layout_height="wrap_content"
             android:text="@string/ipAddress"
             android:textSize="16dp"
-            android:layout_below="@id/InternetResults"
+            android:layout_below="@id/underline"
             android:layout_marginTop="15dp"
             android:drawableLeft="@drawable/ip_foreground"
             android:gravity="center"
             android:textStyle="bold"
             />
         <TextView
-            android:id="@+id/downloadSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/underline"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_toRightOf="@id/ipAddress"
+            android:text="@string/ipAddressValue"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/downloadSpeedTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/downloadSpeed"
@@ -45,7 +64,17 @@
             android:textStyle="bold"
             />
         <TextView
-            android:id="@+id/uploadSpeed"
+            android:id="@+id/downloadSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ipAddress"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_toRightOf="@id/downloadSpeedTab"
+            android:text="@string/downloadValue"
+            android:textSize="16dp" />
+        <TextView
+            android:id="@+id/uploadSpeedTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/uploadSpeed"
@@ -57,10 +86,21 @@
             android:textStyle="bold"
             />
         <TextView
-            android:id="@+id/pingNumber"
+            android:id="@+id/uploadSpeed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/numberPing"
+            android:layout_below="@id/downloadSpeed"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_toRightOf="@id/uploadSpeedTab"
+            android:text="@string/uploadValue"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/pingTab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pingName"
             android:textSize="16dp"
             android:layout_below="@id/uploadSpeed"
             android:layout_marginTop="15dp"
@@ -68,8 +108,20 @@
             android:drawableLeft="@drawable/ic_servers_foreground"
             android:gravity="center"
             />
+
         <TextView
-            android:id="@+id/jitterNumber"
+            android:id="@+id/pingNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/uploadSpeed"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_toRightOf="@id/pingTab"
+            android:text="@string/pingValue"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/jitterTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/jitterInfo"
@@ -80,6 +132,16 @@
             android:drawableLeft="@drawable/waves_foreground"
             android:gravity="center"
             />
+        <TextView
+            android:id="@+id/jitterNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pingNumber"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_toRightOf="@id/jitterTab"
+            android:text="@string/jitterValue"
+            android:textSize="16dp" />
 
     </RelativeLayout>
 
