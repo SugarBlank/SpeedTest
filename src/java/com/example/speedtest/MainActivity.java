@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SpeedTestButton.setEnabled(false);
+                setContentView(R.layout.speedtest_results);
             }
         });
 
