@@ -15,4 +15,5 @@
     <string name="ipAddressName">IP Address:</string>
     <string name="pingValue">0 ms</string>
     <string name="ipAddressValue">192.168.1.1</string>
+    <string name="restartButtonText">Restart Test</string>
 </resources>
