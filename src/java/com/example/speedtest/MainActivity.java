@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -19,12 +20,20 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import com.example.speedtest.databinding.ActivityMainBinding;
 
+import org.w3c.dom.Text;
+
 public class MainActivity extends AppCompatActivity {
-    private TextView ipAddress;
+    private TextView ipAddress = (TextView) findViewById(R.id.ipAddress);
+    private TextView downloadSpeed = (TextView) findViewById(R.id.downloadSpeed);
+    private TextView uploadSpeed = (TextView) findViewById(R.id.uploadSpeed);
+    private TextView ping = (TextView) findViewById(R.id.pingNumber);
+    private TextView jitter = (TextView) findViewById(R.id.jitterNumber);
     private ActivityMainBinding binding;
     final DecimalFormat Format = new DecimalFormat("#.##");
     HashSet<String> BlackList;
@@ -67,6 +76,49 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SpeedTestButton.setEnabled(false);
+                if (HostServerHandler == null){
+                    HostServerHandler = new HostServer();
+                    HostServerHandler.start();
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setContentView(R.layout.startSpeedTest);
+                            }
+                        });
+                        int minute = 600;
+                        while (!HostServerHandler.returnStatus())
+                            minute--;
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (minute <= 0){
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_LONG).show();
+                                        SpeedTestButton.setEnabled(true);
+                                        SpeedTestButton.setText(R.string.restartButtonText);
+                                    }
+                                });
+                                HostServerHandler = null;
+                                return;
+                            }
+                    }
+                    HashMap<Integer, String> key = HostServerHandler.getKey();
+                    HashMap<Integer, List<String>> value = HostServerHandler.getValue();
+                    double Latitude = HostServerHandler.getLatitude();
+                    double Longitude = HostServerHandler.getLongitude();
+                    double dist = 0.0;
+                    int ServerIndex = 0;
+
+                });
                 setContentView(R.layout.speedtest_results);
             }
         });
