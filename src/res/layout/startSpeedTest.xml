@@ -9,26 +9,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <TextView
-            android:id="@+id/text_dashboard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="22sp"
-            android:textColor="@color/Font"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <Button
-            android:id="@+id/button"
+            android:id="@+id/text_dashboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start Speed Test"
+            android:textSize="20sp"
+            android:textColor="@color/Font"
+            android:text="Starting Speed Test...."
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/purple_500"
+            android:width="175dp"
+            android:height="175dp"
             />
+
+
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
