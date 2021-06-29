@@ -1,5 +1,6 @@
 package com.example.speedtest;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +22,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.*;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.List;
 
 import com.example.speedtest.databinding.ActivityMainBinding;
@@ -73,10 +77,9 @@ public class MainActivity extends AppCompatActivity {
         HostServerHandler.start();
 
         SpeedTestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
                 SpeedTestButton.setEnabled(false);
-                if (HostServerHandler == null){
+                if (HostServerHandler == null) {
                     HostServerHandler = new HostServer();
                     HostServerHandler.start();
                 }
@@ -90,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                         int minute = 600;
-                        while (!HostServerHandler.returnStatus())
+                        while (!HostServerHandler.returnStatus()) {
                             minute--;
                             try {
                                 Thread.sleep(100);
@@ -98,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-                            if (minute <= 0){
+                            if (minute <= 0) {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -110,19 +113,52 @@ public class MainActivity extends AppCompatActivity {
                                 HostServerHandler = null;
                                 return;
                             }
+                        }
+                        HashMap<Integer, String> key = HostServerHandler.getKey();
+                        HashMap<Integer, List<String>> value = HostServerHandler.getValue();
+                        double Latitude = HostServerHandler.getLatitude();
+                        double Longitude = HostServerHandler.getLongitude();
+                        double dist = 0.0;
+                        int ServerIndex = 0;
+                        double temp = 19349458;
+
+                        for (int index : key.keySet()) {
+                            if (BlackList.contains(value.get(ServerIndex).get(5))) {
+                                continue;
+                            }
+                            Location source = new Location("source");
+                            source.setLongitude(Longitude);
+                            source.setLatitude(Latitude);
+                            List<String> list = value.get(index);
+                            Location destination = new Location("destination");
+                            destination.setLatitude(Latitude);
+                            destination.setLongitude(Longitude);
+
+                            double distance = source.distanceTo(destination);
+                            if (temp > distance) {
+                                temp = distance;
+                                dist = distance;
+                                ServerIndex = index;
+                            }
+                        }
+                        String testAddress = key.get(ServerIndex).replace("http://", "https://");
+                        final List<String> info = value.get(ServerIndex);
+                        final double distance = dist;
+                        if (info == null) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    SpeedTestButton.setText("Error getting Host Location.");
+                                }
+                            });
+                            return;
+                        }
+                        setContentView(R.layout.speedtest_results);
                     }
-                    HashMap<Integer, String> key = HostServerHandler.getKey();
-                    HashMap<Integer, List<String>> value = HostServerHandler.getValue();
-                    double Latitude = HostServerHandler.getLatitude();
-                    double Longitude = HostServerHandler.getLongitude();
-                    double dist = 0.0;
-                    int ServerIndex = 0;
-
                 });
-                setContentView(R.layout.speedtest_results);
+
             }
+
         });
-
     }
-
 }
