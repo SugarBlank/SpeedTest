@@ -42,6 +42,17 @@ public class MainActivity extends AppCompatActivity {
     final DecimalFormat Format = new DecimalFormat("#.##");
     HashSet<String> BlackList;
     HostServer HostServerHandler;
+    StringBuilder stringBuilder = new StringBuilder();
+    Formatter formatter = new Formatter(stringBuilder);
+    private boolean ipAddressTestStarted = false;
+    private boolean ipAddressTestFinished = false;
+    private boolean pingTestStarted = false;
+    private boolean pingTestFinished = false;
+    private boolean downloadTestStarted = false;
+    private boolean downloadTestFinished = false;
+    private boolean uploadTestStarted = false;
+    private boolean uploadTestFinished = false;
+
 
     @Override
     public void onResume() {
@@ -153,6 +164,28 @@ public class MainActivity extends AppCompatActivity {
                             });
                             return;
                         }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SpeedTestButton.setText("Location: " + info.get(2));
+                            }
+                        });
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                downloadSpeed.setText(R.id.downloadSpeed);
+                                uploadSpeed.setText(R.id.uploadSpeed);
+                                ping.setText(R.id.pingNumber);
+                                jitter.setText(R.id.jitterNumber);
+                                ipAddress.setText(R.id.ipAddress);
+                            }
+                        });
+                        final List<Double> pingRate = new ArrayList<Double>();
+                        final List<Double> downloadRate = new ArrayList<Double>();
+                        final List<Double> uploadRate = new ArrayList<Double>();
+
+
                         setContentView(R.layout.speedtest_results);
                     }
                 });
