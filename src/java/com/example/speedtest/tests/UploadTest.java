@@ -119,6 +119,19 @@ class doUploadTests extends Thread
                 connection.getResponseCode();
 
                 KBytesUploaded += buffer.length / 1024;
+                long EndTime = System.currentTimeMillis();
+                double TotalTime = (EndTime - StartTime) / 1000;
+                if (TotalTime >= timeout)
+                {
+                    break;
+                }
+                dataOutputStream.close();
+                connection.disconnect();
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+                break;
             }
         }
     }
