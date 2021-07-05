@@ -7,6 +7,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.speedtest.tests.DownloadTest;
+import com.example.speedtest.tests.PingTest;
+import com.example.speedtest.tests.UploadTest;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -100,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                setContentView(R.layout.startSpeedTest);
+                                setContentView(R.layout.startspeedtest);
                             }
                         });
                         int minute = 600;
@@ -185,10 +188,147 @@ public class MainActivity extends AppCompatActivity {
                         final List<Double> downloadRate = new ArrayList<Double>();
                         final List<Double> uploadRate = new ArrayList<Double>();
 
+                        final PingTest pingTest = new PingTest(info.get(6).replace(":8800", ""), 5);
+                        final DownloadTest downloadTest = new DownloadTest(testAddress.replace(testAddress.split("/")[testAddress.split("/").length - 1], ""));
+                        final UploadTest uploadTest = new UploadTest(testAddress);
+
+                        while (true)
+                        {
+                            if (!pingTestStarted)
+                            {
+                                pingTest.start();
+                                pingTestStarted = true;
+                            }
+                            if (pingTestFinished && !downloadTestStarted)
+                            {
+                                downloadTest.start();
+                                downloadTestStarted = true;
+                            }
+                            if (downloadTestFinished && !uploadTestStarted)
+                            {
+                                uploadTest.start();
+                                uploadTestStarted = true;
+                            }
+
+
+                            // Ping Test Calculations
+                            if (pingTestFinished)
+                            {
+                                if (pingTest.getAverageRoundTripTime() == 0)
+                                {
+                                    ping.setText("Ping Error");
+                                }
+                                else
+                                {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ping.setText(pingTest.getAverageRoundTripTime() + "ms");
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                pingRate.add(pingTest.getInstantRoundTripTime());
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ping.setText(pingTest.getInstantRoundTripTime() + "ms");
+                                    }
+                                });
+                            }
+
+                            // Download Test Calculations
+                            if (pingTestFinished)
+                            {
+                                if (downloadTestFinished)
+                                {
+                                    if (downloadTest.getFinalDownloadRate() == 0)
+                                    {
+                                        downloadSpeed.setText("Download Speed Error");
+                                    }
+                                }
+                                else
+                                {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            downloadSpeed.setText(downloadTest.getFinalDownloadRate() + "ms");
+                                        }
+                                    });
+                                }
+                            }
+
+                            // Upload Speed Calculations
+                            if (downloadTestFinished)
+                            {
+                                if (uploadTestFinished)
+                                {
+                                    if (uploadTest.getFinalDownloadRate() == 0)
+                                    {
+                                        uploadSpeed.setText("Upload Speed Error");
+                                    }
+                                }
+                                else
+                                {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            uploadSpeed.setText(uploadTest.getFinalDownloadRate() + "ms");
+                                        }
+                                    });
+                                }
+                            }
+                            if (pingTestFinished && downloadTestFinished && uploadTestFinished)
+                            {
+                                break;
+                            }
+                            if (pingTest.isFinished())
+                            {
+                                pingTestFinished = true;
+                            }
+                            if (downloadTest.CurrentStatus())
+                            {
+                                downloadTestFinished = true;
+                            }
+                            if (uploadTest.CurrentStatus())
+                            {
+                                uploadTestFinished = true;
+                            }
+                            if (pingTestStarted && !pingTestFinished)
+                            {
+                                try {
+                                    Thread.sleep(500);
+                                }
+                                catch (InterruptedException interruptedException)
+                                {
+
+                                }
+                            }
+                            else
+                            {
+                                try {
+                                    Thread.sleep(500);
+                                }
+                                catch (InterruptedException interruptedException)
+                                {
+
+                                }
+                            }
+
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SpeedTestButton.setEnabled(true);
+                                SpeedTestButton.setText(R.id.restartTestToggle);
+                            }
+                        });
 
                         setContentView(R.layout.speedtest_results);
                     }
-                });
+                }).start();
 
             }
 
