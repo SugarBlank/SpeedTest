@@ -36,11 +36,7 @@ import com.example.speedtest.databinding.ActivityMainBinding;
 import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView ipAddress = (TextView) findViewById(R.id.ipAddress);
-    private TextView downloadSpeed = (TextView) findViewById(R.id.downloadSpeed);
-    private TextView uploadSpeed = (TextView) findViewById(R.id.uploadSpeed);
-    private TextView ping = (TextView) findViewById(R.id.pingNumber);
-    private TextView jitter = (TextView) findViewById(R.id.jitterNumber);
+
     private ActivityMainBinding binding;
     final DecimalFormat Format = new DecimalFormat("#.##");
     HashSet<String> BlackList;
@@ -66,7 +62,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        TextView ipAddressTextView = (TextView) findViewById(R.id.ipAddress);
+        TextView downloadSpeed = (TextView) findViewById(R.id.downloadSpeed);
+        TextView uploadSpeed = (TextView) findViewById(R.id.uploadSpeed);
+        TextView ping = (TextView) findViewById(R.id.pingNumber);
+        TextView jitter = (TextView) findViewById(R.id.jitterNumber);
         BlackList = new HashSet<>();
 
         super.onCreate(savedInstanceState);
@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
 
-        ipAddress = (TextView) findViewById(R.id.ipAddress);
         final Button SpeedTestButton = (Button) findViewById(R.id.startButton);
         HostServerHandler = new HostServer();
         HostServerHandler.start();
@@ -135,9 +134,10 @@ public class MainActivity extends AppCompatActivity {
                         double dist = 0.0;
                         int ServerIndex = 0;
                         double temp = 19349458;
+                        BlackList = new HashSet<String>();
 
                         for (int index : key.keySet()) {
-                            if (BlackList.contains(value.get(ServerIndex).get(5))) {
+                            if (BlackList.contains(value.get(index).get(3))) {
                                 continue;
                             }
                             Location source = new Location("source");
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                                 uploadSpeed.setText(R.id.uploadSpeed);
                                 ping.setText(R.id.pingNumber);
                                 jitter.setText(R.id.jitterNumber);
-                                ipAddress.setText(R.id.ipAddress);
+                                ipAddressTextView.setText(R.id.ipAddress);
                             }
                         });
                         final List<Double> pingRate = new ArrayList<Double>();
