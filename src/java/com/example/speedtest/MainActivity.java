@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         TextView ipAddressTextView = (TextView) findViewById(R.id.ipAddress);
-        TextView downloadSpeed = (TextView) findViewById(R.id.downloadSpeed);
+        TextView downloadValue = (TextView) findViewById(R.id.downloadSpeed);
         TextView uploadSpeed = (TextView) findViewById(R.id.uploadSpeed);
         TextView ping = (TextView) findViewById(R.id.pingNumber);
         TextView jitter = (TextView) findViewById(R.id.jitterNumber);
@@ -140,11 +140,11 @@ public class MainActivity extends AppCompatActivity {
                             if (BlackList.contains(value.get(index).get(3))) {
                                 continue;
                             }
-                            Location source = new Location("source");
+                            Location source = new Location("Source");
                             source.setLongitude(Longitude);
                             source.setLatitude(Latitude);
                             List<String> list = value.get(index);
-                            Location destination = new Location("destination");
+                            Location destination = new Location("Dest");
                             destination.setLatitude(Latitude);
                             destination.setLongitude(Longitude);
 
@@ -177,18 +177,14 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                downloadSpeed.setText(R.id.downloadSpeed);
-                                uploadSpeed.setText(R.id.uploadSpeed);
-                                ping.setText(R.id.pingNumber);
-                                jitter.setText(R.id.jitterNumber);
-                                ipAddressTextView.setText(R.id.ipAddress);
+                                SpeedTestButton.setText("Starting Speed Test");
                             }
                         });
                         final List<Double> pingRate = new ArrayList<Double>();
                         final List<Double> downloadRate = new ArrayList<Double>();
                         final List<Double> uploadRate = new ArrayList<Double>();
 
-                        final PingTest pingTest = new PingTest(info.get(6).replace(":8800", ""), 5);
+                        final PingTest pingTest = new PingTest(info.get(4).replace(":8800", ""), 5);
                         final DownloadTest downloadTest = new DownloadTest(testAddress.replace(testAddress.split("/")[testAddress.split("/").length - 1], ""));
                         final UploadTest uploadTest = new UploadTest(testAddress);
 
@@ -246,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
                                 {
                                     if (downloadTest.getFinalDownloadRate() == 0)
                                     {
-                                        downloadSpeed.setText("Download Speed Error");
+                                        downloadValue.setText("Download Speed Error");
                                     }
                                 }
                                 else
@@ -254,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            downloadSpeed.setText(downloadTest.getFinalDownloadRate() + "ms");
+                                            downloadValue.setText(downloadTest.getFinalDownloadRate() + "ms");
                                         }
                                     });
                                 }
