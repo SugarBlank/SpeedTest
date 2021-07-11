@@ -38,7 +38,6 @@ import org.w3c.dom.Text;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    final DecimalFormat Format = new DecimalFormat("#.##");
     HashSet<String> BlackList;
     HostServer HostServerHandler;
     StringBuilder stringBuilder = new StringBuilder();
@@ -62,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final DecimalFormat DecFormat = new DecimalFormat("#.##");
         TextView ipAddressTextView = (TextView) findViewById(R.id.ipAddress);
         TextView downloadValue = (TextView) findViewById(R.id.downloadSpeed);
         TextView uploadSpeed = (TextView) findViewById(R.id.uploadSpeed);
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                SpeedTestButton.setText("Starting Speed Test");
+                                setContentView(R.layout.startspeedtest);
                             }
                         });
                         final List<Double> pingRate = new ArrayList<Double>();
@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        ping.setText(pingTest.getInstantRoundTripTime() + "ms");
+                                        ping.setText(DecFormat.format(pingTest.getInstantRoundTripTime()) + " ams");
                                     }
                                 });
                             }
