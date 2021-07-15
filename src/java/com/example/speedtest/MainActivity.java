@@ -1,5 +1,6 @@
 package com.example.speedtest;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
@@ -32,8 +33,7 @@ import java.util.Map;
 import java.util.List;
 
 import com.example.speedtest.databinding.ActivityMainBinding;
-
-import org.w3c.dom.Text;
+import com.example.speedtest.IpAddress;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,29 +61,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         final DecimalFormat DecFormat = new DecimalFormat("#.##");
-        TextView ipAddressTextView = (TextView) findViewById(R.id.ipAddress);
-        TextView downloadValue = (TextView) findViewById(R.id.downloadSpeed);
-        TextView uploadSpeed = (TextView) findViewById(R.id.uploadSpeed);
-        TextView ping = (TextView) findViewById(R.id.pingNumber);
-        TextView jitter = (TextView) findViewById(R.id.jitterNumber);
+
         BlackList = new HashSet<>();
 
-        super.onCreate(savedInstanceState);
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.speedtest_results);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);
-
+        View view = findViewById(R.layout.speedtest_results);
 
         final Button SpeedTestButton = (Button) findViewById(R.id.startButton);
         HostServerHandler = new HostServer();
@@ -97,12 +83,17 @@ public class MainActivity extends AppCompatActivity {
                     HostServerHandler.start();
                 }
                 new Thread(new Runnable() {
+                    TextView ipAddressTextView = (TextView) findViewById(R.id.ipAddressNumber);
+                    TextView downloadValue = (TextView) findViewById(R.id.downloadSpeed);
+                    TextView uploadSpeed = (TextView) findViewById(R.id.uploadSpeed);
+                    TextView ping = (TextView) findViewById(R.id.pingNumber);
+                    TextView jitter = (TextView) findViewById(R.id.jitterNumber);
                     @Override
                     public void run() {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                setContentView(R.layout.startspeedtest);
+                                SpeedTestButton.setText("Starting Speed Test Now");
                             }
                         });
                         int minute = 600;
@@ -174,12 +165,7 @@ public class MainActivity extends AppCompatActivity {
                                 SpeedTestButton.setText("Location: " + info.get(2));
                             }
                         });
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                setContentView(R.layout.startspeedtest);
-                            }
-                        });
+
                         final List<Double> pingRate = new ArrayList<Double>();
                         final List<Double> downloadRate = new ArrayList<Double>();
                         final List<Double> uploadRate = new ArrayList<Double>();
@@ -187,6 +173,13 @@ public class MainActivity extends AppCompatActivity {
                         final PingTest pingTest = new PingTest(info.get(4).replace(":8800", ""), 5);
                         final DownloadTest downloadTest = new DownloadTest(testAddress.replace(testAddress.split("/")[testAddress.split("/").length - 1], ""));
                         final UploadTest uploadTest = new UploadTest(testAddress);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ipAddressTextView.setText(IpAddress.getIPAddress(true));
+                            }
+                        });
 
                         while (true)
                         {
@@ -205,21 +198,25 @@ public class MainActivity extends AppCompatActivity {
                                 uploadTest.start();
                                 uploadTestStarted = true;
                             }
-
-
                             // Ping Test Calculations
                             if (pingTestFinished)
                             {
-                                if (pingTest.getAverageRoundTripTime() == 0)
+                                if (pingTest.getAverageRoundTripTime() != 0)
                                 {
-                                    ping.setText("Ping Error");
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ping.setText("Error");
+                                        }
+                                    });
+
                                 }
                                 else
                                 {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            ping.setText(pingTest.getAverageRoundTripTime() + "ms");
+                                            ping.setText(pingTest.getAverageRoundTripTime() + " ms");
                                         }
                                     });
                                 }
@@ -230,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        ping.setText(DecFormat.format(pingTest.getInstantRoundTripTime()) + " ams");
+                                        ping.setText(DecFormat.format(pingTest.getInstantRoundTripTime()) + " ms");
                                     }
                                 });
                             }
@@ -242,7 +239,12 @@ public class MainActivity extends AppCompatActivity {
                                 {
                                     if (downloadTest.getFinalDownloadRate() == 0)
                                     {
-                                        downloadValue.setText("Download Speed Error");
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                downloadValue.setText("Error");
+                                            }
+                                        });
                                     }
                                 }
                                 else
@@ -262,9 +264,12 @@ public class MainActivity extends AppCompatActivity {
                                 if (uploadTestFinished)
                                 {
                                     if (uploadTest.getFinalDownloadRate() == 0)
-                                    {
-                                        uploadSpeed.setText("Upload Speed Error");
-                                    }
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                uploadSpeed.setText("Download Speed Error");
+                                            }
+                                        });
                                 }
                                 else
                                 {
@@ -318,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 SpeedTestButton.setEnabled(true);
-                                SpeedTestButton.setText(R.id.restartTestToggle);
+                                SpeedTestButton.setText(R.id.startButton);
                             }
                         });
 
