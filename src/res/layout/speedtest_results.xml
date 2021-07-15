@@ -43,6 +43,7 @@
             android:textStyle="bold"
             app:drawableStartCompat="@drawable/ip_foreground" />
         <TextView
+            android:id="@+id/ipAddressNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/underline"
@@ -140,10 +141,10 @@
             android:text="@string/jitterValue"
             android:textSize="16sp" />
         <Button
-            android:id="@+id/restartTestToggle"
+            android:id="@+id/startButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/restartButtonText"
+            android:text="Start Speed Test"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/jitterNumber"
             android:layout_marginTop="40dp"
