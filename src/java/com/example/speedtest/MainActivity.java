@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                             // Ping Test Calculations
                             if (pingTestFinished)
                             {
-                                if (pingTest.getAverageRoundTripTime() != 0)
+                                if (pingTest.getAverageRoundTripTime() == 0)
                                 {
                                     runOnUiThread(new Runnable() {
                                         @Override
