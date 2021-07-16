@@ -37,6 +37,7 @@ public class DownloadTest extends Thread{
         if (BytesDownloaded >= 0)
         {
             this.InitialDownloadRate = (Long)Math.round(((BytesDownloaded * 8) / (1000 * 1000)) / TotalTime);
+
         }
         else
         {
@@ -71,7 +72,7 @@ public class DownloadTest extends Thread{
                 Connection.setHostnameVerifier(new HostnameVerifier() {
                     @Override
                     public boolean verify(String hostname, SSLSession session) {
-                        return false;
+                        return true;
                     }
                 });
                 Connection.connect();
