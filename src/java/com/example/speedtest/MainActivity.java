@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                         final List<Double> downloadRate = new ArrayList<Double>();
                         final List<Double> uploadRate = new ArrayList<Double>();
 
-                        final PingTest pingTest = new PingTest(info.get(4).replace(":8800", ""), 5);
+                        final PingTest pingTest = new PingTest(info.get(6).replace(":8800", ""), 1);
                         final DownloadTest downloadTest = new DownloadTest(testAddress.replace(testAddress.split("/")[testAddress.split("/").length - 1], ""));
                         final UploadTest uploadTest = new UploadTest(testAddress);
 
@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            downloadValue.setText(downloadTest.getFinalDownloadRate() + "ms");
+                                            downloadValue.setText(downloadTest.getFinalDownloadRate() + " mbps");
                                         }
                                     });
                                 }
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                uploadSpeed.setText("Download Speed Error");
+                                                uploadSpeed.setText("Upload Speed Error");
                                             }
                                         });
                                 }
@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            uploadSpeed.setText(uploadTest.getFinalDownloadRate() + "ms");
+                                            uploadSpeed.setText(uploadTest.getFinalDownloadRate() + " mbps");
                                         }
                                     });
                                 }
