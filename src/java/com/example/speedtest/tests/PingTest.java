@@ -37,7 +37,7 @@ public class PingTest extends Thread{
     {
         try
         {
-            ProcessBuilder processBuilder = new ProcessBuilder("ping", "-c" + count, this.server);
+            ProcessBuilder processBuilder = new ProcessBuilder("ping", "-c" + count, "google.com");
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -48,7 +48,7 @@ public class PingTest extends Thread{
                 {
                     instantRoundTripTime = Double.parseDouble(line.split(" ")[line.split(" ").length - 2].replace("time=", ""));
                 }
-                if (line.startsWith("rtt"))
+                if (line.startsWith("rtt "))
                 {
                     averageRoundTripTime = Double.parseDouble(line.split("/")[4]);
                     break;
@@ -60,7 +60,6 @@ public class PingTest extends Thread{
             }
             process.waitFor();
             bufferedReader.close();
-
         }
         catch (Exception exception)
         {
