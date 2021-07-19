@@ -36,9 +36,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ipAddress"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:layout_below="@id/underline"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="25dp"
             android:gravity="center"
             android:textStyle="bold"
             app:drawableStartCompat="@drawable/ip_foreground" />
@@ -48,10 +48,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/underline"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="38dp"
             android:layout_toEndOf="@id/ipAddress"
             android:text="@string/ipAddressValue"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/downloadSpeedTab"
@@ -59,8 +59,8 @@
             android:layout_height="wrap_content"
             android:text="@string/downloadSpeed"
             android:layout_below="@id/ipAddress"
-            android:textSize="16sp"
-            android:layout_marginTop="4dp"
+            android:textSize="18sp"
+            android:layout_marginTop="14dp"
             android:gravity="center"
             android:textStyle="bold"
             app:drawableStartCompat="@drawable/download_foreground" />
@@ -70,18 +70,18 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/ipAddress"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="19dp"
+            android:layout_marginTop="27dp"
             android:layout_toEndOf="@id/downloadSpeedTab"
             android:text="@string/downloadValue"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
         <TextView
             android:id="@+id/uploadSpeedTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/uploadSpeed"
             android:layout_below="@id/downloadSpeed"
-            android:textSize="16sp"
-            android:layout_marginTop="15dp"
+            android:textSize="18sp"
+            android:layout_marginTop="25dp"
             android:gravity="center"
             android:textStyle="bold"
             app:drawableStartCompat="@drawable/upload_foreground" />
@@ -91,19 +91,19 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/downloadSpeed"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="38dp"
             android:layout_toEndOf="@id/uploadSpeedTab"
             android:text="@string/uploadValue"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/pingTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pingName"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:layout_below="@id/uploadSpeed"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="25dp"
             android:textStyle="bold"
             android:gravity="center"
             app:drawableStartCompat="@drawable/ic_servers_foreground" />
@@ -114,39 +114,18 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/uploadSpeed"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="40dp"
             android:layout_toEndOf="@id/pingTab"
             android:text="@string/pingValue"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/jitterTab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/jitterInfo"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_below="@id/pingNumber"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            app:drawableStartCompat="@drawable/waves_foreground" />
-        <TextView
-            android:id="@+id/jitterNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/pingNumber"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
-            android:layout_toEndOf="@id/jitterTab"
-            android:text="@string/jitterValue"
-            android:textSize="16sp" />
         <Button
             android:id="@+id/startButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Start Speed Test"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/jitterNumber"
+            android:layout_below="@id/pingNumber"
             android:layout_marginTop="40dp"
             android:height="60dp"
             android:textSize="18sp"/>
