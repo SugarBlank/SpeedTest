@@ -10,9 +10,13 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
+import com.example.speedtest.tests.DownloadTest;
+
+import fr.bmartel.speedtest.SpeedTestSocket;
+import fr.bmartel.speedtest.utils.SpeedTestUtils;
 
 public class UploadTest extends Thread {
-    public String UploadUrl;
+    public String UploadUrl = "https://ipv4.ikoula.testdebit.info:8080/10M/10M.apk" ;
     double StartTime;
     double EndTime;
     double TotalTime;
@@ -22,6 +26,7 @@ public class UploadTest extends Thread {
     boolean status = false;
     HttpsURLConnection Connection;
     int TimeOut = 5;
+    SpeedTestSocket speedTestSocket;
 
     public UploadTest(String UploadUrl)
     {
@@ -33,21 +38,22 @@ public class UploadTest extends Thread {
         return status;
     }
 
-    public void SetInitialUploadRate(int KBytesUploaded, Double TotalTime)
+    public double SetInitialUploadRate()
     {
         if (KBytesUploaded >= 0)
         {
-            this.InitialUploadRate = (Long)Math.round(((KBytesUploaded * 8) / (1000 * 1000)) / TotalTime);
+            return (Long)Math.round(((KBytesUploaded * 8) / (1000 * 1000)) / TotalTime);
         }
         else
         {
-            this.InitialUploadRate = 0.0;
+            return 0.0;
         }
     }
     public double getFinalDownloadRate()
     {
         return Math.round(UploadRate * 100) / 100;
     }
+
     @Override
     public void run()
     {
@@ -55,10 +61,10 @@ public class UploadTest extends Thread {
         {
             URL url = new URL(UploadUrl);
             KBytesUploaded = 0;
-            StartTime = System.currentTimeMillis();
 
-            ExecutorService executorService = Executors.newFixedThreadPool(8);
-            for (int i = 0; i < 8; i++)
+
+            ExecutorService executorService = Executors.newFixedThreadPool(4);
+            for (int i = 0; i < 4; i++)
             {
                 executorService.execute(new doUploadTests(url));
             }
@@ -66,7 +72,7 @@ public class UploadTest extends Thread {
             while (!executorService.isTerminated())
                 try
                 {
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 }
                 catch (InterruptedException interruptedException)
                 {
@@ -94,22 +100,17 @@ class doUploadTests extends Thread
     {
         byte[] buffer = new byte[150 * 1024];
         long StartTime = System.currentTimeMillis();
-        int timeout = 10;
+        int timeout = 8;
         while (true)
         {
             try {
-                HttpsURLConnection connection = null;
+                HttpsURLConnection connection;
                 connection = (HttpsURLConnection) url.openConnection();
                 connection.setDoOutput(true);
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Connection", "Keep-Alive");
                 connection.setSSLSocketFactory((SSLSocketFactory)SSLSocketFactory.getDefault());
-                connection.setHostnameVerifier(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String hostname, SSLSession session) {
-                        return true;
-                    }
-                });
+                connection.setHostnameVerifier((hostname, session) -> true);
                 connection.connect();
 
                 DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
@@ -118,9 +119,9 @@ class doUploadTests extends Thread
 
                 connection.getResponseCode();
 
-                KBytesUploaded += buffer.length / 1024;
+                KBytesUploaded += buffer.length / 1024.0;
                 long EndTime = System.currentTimeMillis();
-                double TotalTime = (EndTime - StartTime) / 1000;
+                double TotalTime = (EndTime - StartTime) / 1000.0;
                 if (TotalTime >= timeout)
                 {
                     break;
