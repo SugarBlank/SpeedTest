@@ -10,7 +10,12 @@ import android.widget.Toast;
 import com.example.speedtest.tests.DownloadTest;
 import com.example.speedtest.tests.PingTest;
 import com.example.speedtest.tests.UploadTest;
+
+import fr.bmartel.speedtest.SpeedTestReport;
 import fr.bmartel.speedtest.SpeedTestSocket;
+import fr.bmartel.speedtest.inter.ISpeedTestListener;
+import fr.bmartel.speedtest.model.SpeedTestError;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.DecimalFormat;
@@ -53,21 +58,21 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.speedtest_results);
 
-        final Button SpeedTestButton = (Button) findViewById(R.id.startButton);
+        final Button SpeedTestButton = findViewById(R.id.startButton);
         HostServerHandler = new HostServer();
         HostServerHandler.start();
 
-        SpeedTestButton.setOnClickListener((View.OnClickListener) v -> {
+        SpeedTestButton.setOnClickListener(v -> {
             SpeedTestButton.setEnabled(false);
             if (HostServerHandler == null) {
                 HostServerHandler = new HostServer();
                 HostServerHandler.start();
             }
             new Thread(new Runnable() {
-                final TextView ipAddressTextView = (TextView) findViewById(R.id.ipAddressNumber);
-                final TextView downloadValue = (TextView) findViewById(R.id.downloadSpeed);
-                final TextView uploadSpeed = (TextView) findViewById(R.id.uploadSpeed);
-                final TextView ping = (TextView) findViewById(R.id.pingNumber);
+                final TextView ipAddressTextView = findViewById(R.id.ipAddressNumber);
+                final TextView downloadValue =  findViewById(R.id.downloadSpeed);
+                final TextView uploadSpeed =  findViewById(R.id.uploadSpeed);
+                final TextView ping = findViewById(R.id.pingNumber);
 
                 @Override
                 public void run() {
@@ -190,20 +195,41 @@ public class MainActivity extends AppCompatActivity {
                                 runOnUiThread(() -> downloadValue.setText(downloadTest.getFinalDownloadRate() + " mbps"));
                             }
                         }
-
-                        // Upload Speed Calculations
                         if (downloadTestFinished)
                         {
-                            if (uploadTestFinished)
+                            if(uploadTestFinished)
                             {
-                                if (uploadTest.getFinalDownloadRate() == 0)
-                                    runOnUiThread(() -> uploadSpeed.setText("Upload Speed Error"));
+
                             }
                             else
                             {
-                                runOnUiThread(() -> uploadSpeed.setText(uploadTest.getFinalDownloadRate() + " mbpss"));
+                                SpeedTestSocket speedTestSocket = new SpeedTestSocket();
+                                speedTestSocket.addSpeedTestListener(new ISpeedTestListener() {
+                                    @Override
+                                    public void onCompletion(SpeedTestReport report) {
+                                        // called when download/upload is complete
+                                        System.out.println("[COMPLETED] rate in bit/s   : " + report.getTransferRateBit());
+                                        runOnUiThread(() -> uploadSpeed.setText(report.getTransferRateBit() + "mbps"));
+                                        finish();
+                                    }
+
+                                    @Override
+                                    public void onError(SpeedTestError speedTestError, String errorMessage) {
+                                        // called when a download/upload error occur
+                                    }
+
+                                    @Override
+                                    public void onProgress(float percent, SpeedTestReport report) {
+                                        // called to notify download/upload progress
+                                        System.out.println("[PROGRESS] progress : " + percent + "%");
+                                        System.out.println("[PROGRESS] rate in bit/s   : " + report.getTransferRateBit());
+                                    }
+                                });
+                                speedTestSocket.startUpload("http://ipv4.ikoula.testdebit.info/", 100000);
                             }
+
                         }
+
                         if (pingTestFinished && downloadTestFinished && uploadTestFinished)
                         {
                             break;
