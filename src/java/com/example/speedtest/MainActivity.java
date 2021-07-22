@@ -18,6 +18,7 @@ import fr.bmartel.speedtest.model.SpeedTestError;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.*;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean downloadTestFinished = false;
     private boolean uploadTestStarted = false;
     private boolean uploadTestFinished = false;
+    private BigDecimal Bytes = new BigDecimal(8000000);
 
 
     @Override
@@ -209,8 +211,8 @@ public class MainActivity extends AppCompatActivity {
                                     public void onCompletion(SpeedTestReport report) {
                                         // called when download/upload is complete
                                         System.out.println("[COMPLETED] rate in bit/s   : " + report.getTransferRateBit());
-                                        runOnUiThread(() -> uploadSpeed.setText(report.getTransferRateBit() + "mbps"));
-                                        finish();
+                                        runOnUiThread(() -> uploadSpeed.setText(report.getTransferRateBit().divide(Bytes, 2, BigDecimal.ROUND_UP) + " mbps"));
+                                        uploadTestFinished = true;
                                     }
 
                                     @Override
@@ -260,7 +262,6 @@ public class MainActivity extends AppCompatActivity {
                         SpeedTestButton.setText(R.id.startButton);
                     });
 
-                    setContentView(R.layout.speedtest_results);
                 }
             }).start();
 
