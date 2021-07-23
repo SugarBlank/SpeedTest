@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.SpeedTest" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:navigationBarColor">@color/TopPanel</item>
 
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/TopPanel</item>
