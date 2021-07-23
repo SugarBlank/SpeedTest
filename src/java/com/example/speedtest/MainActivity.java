@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.example.speedtest.tests.DownloadTest;
 import com.example.speedtest.tests.PingTest;
-import com.example.speedtest.tests.UploadTest;
 
 import fr.bmartel.speedtest.SpeedTestReport;
 import fr.bmartel.speedtest.SpeedTestSocket;
@@ -19,6 +18,8 @@ import fr.bmartel.speedtest.model.SpeedTestError;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.math.BigDecimal;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.*;
@@ -141,9 +142,14 @@ public class MainActivity extends AppCompatActivity {
 
                     final PingTest pingTest = new PingTest(info.get(6).replace(":8800", ""), 1);
                     final DownloadTest downloadTest = new DownloadTest(testAddress.replace(testAddress.split("/")[testAddress.split("/").length - 1], ""));
-                    final UploadTest uploadTest = new UploadTest(testAddress);
 
-                    runOnUiThread(() -> ipAddressTextView.setText(IpAddress.getIPAddress(true)));
+                    runOnUiThread(() -> {
+                        try {
+                            ipAddressTextView.setText(IpAddress.getIPAddress());
+                        } catch (UnknownHostException e) {
+                            e.printStackTrace();
+                        }
+                    });
 
                     while (true)
                     {
@@ -159,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                         if (downloadTestFinished && !uploadTestStarted)
                         {
-                            uploadTest.start();
                             uploadTestStarted = true;
                         }
                         // Ping Test Calculations
@@ -197,39 +202,29 @@ public class MainActivity extends AppCompatActivity {
                                 runOnUiThread(() -> downloadValue.setText(downloadTest.getFinalDownloadRate() + " mbps"));
                             }
                         }
+                        // Upload Speed Calculations
                         if (downloadTestFinished)
                         {
-                            if(uploadTestFinished)
-                            {
+                            SpeedTestSocket speedTestSocket = new SpeedTestSocket();
+                            speedTestSocket.addSpeedTestListener(new ISpeedTestListener() {
+                                @Override
+                                public void onCompletion(SpeedTestReport report) {
+                                    // called when download/upload is complete
+                                    System.out.println("[COMPLETED] rate in bit/s   : " + report.getTransferRateBit());
+                                    uploadTestFinished = true;
+                                    runOnUiThread(() -> uploadSpeed.setText(report.getTransferRateBit().divide(Bytes, 2, BigDecimal.ROUND_UP) + " mbps"));
+                                }
 
-                            }
-                            else
-                            {
-                                SpeedTestSocket speedTestSocket = new SpeedTestSocket();
-                                speedTestSocket.addSpeedTestListener(new ISpeedTestListener() {
-                                    @Override
-                                    public void onCompletion(SpeedTestReport report) {
-                                        // called when download/upload is complete
-                                        System.out.println("[COMPLETED] rate in bit/s   : " + report.getTransferRateBit());
-                                        runOnUiThread(() -> uploadSpeed.setText(report.getTransferRateBit().divide(Bytes, 2, BigDecimal.ROUND_UP) + " mbps"));
-                                        uploadTestFinished = true;
-                                    }
+                                @Override
+                                public void onError(SpeedTestError speedTestError, String errorMessage) {
+                                    // called when a download/upload error occur
+                                }
 
-                                    @Override
-                                    public void onError(SpeedTestError speedTestError, String errorMessage) {
-                                        // called when a download/upload error occur
-                                    }
-
-                                    @Override
-                                    public void onProgress(float percent, SpeedTestReport report) {
-                                        // called to notify download/upload progress
-                                        System.out.println("[PROGRESS] progress : " + percent + "%");
-                                        System.out.println("[PROGRESS] rate in bit/s   : " + report.getTransferRateBit());
-                                    }
-                                });
-                                speedTestSocket.startUpload("http://ipv4.ikoula.testdebit.info/", 100000);
-                            }
-
+                                @Override
+                                public void onProgress(float percent, SpeedTestReport report) {
+                                }
+                            });
+                            speedTestSocket.startUpload("http://ipv4.ikoula.testdebit.info/", 100000);
                         }
 
                         if (pingTestFinished && downloadTestFinished && uploadTestFinished)
@@ -244,10 +239,6 @@ public class MainActivity extends AppCompatActivity {
                         {
                             downloadTestFinished = true;
                         }
-                        if (uploadTest.CurrentStatus())
-                        {
-                            uploadTestFinished = true;
-                        }
                         try {
                             Thread.sleep(500);
                         }
@@ -257,9 +248,12 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                     }
-                    runOnUiThread(() -> {
-                        SpeedTestButton.setEnabled(true);
-                        SpeedTestButton.setText(R.id.startButton);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SpeedTestButton.setEnabled(false);
+                            SpeedTestButton.setText("Test Complete");
+                        }
                     });
 
                 }
